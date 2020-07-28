@@ -4,7 +4,6 @@ Created on Tue Jul 28 09:58:11 2020
 
 @author: hardh
 """
-import sys
 from agent import ThomSamp_GoF
 from agent_cd import ThomSamp_MeanDiff
 from arm_reward_truncnorm import TruncNorm
@@ -29,9 +28,6 @@ for run in np.arange(runs):
     for t in np.arange(T):
         if t in change_points:
             arm = []
-            #prev_max_i = np.argmax(mu)
-            #prev_max = np.max(mu)
-            #while (abs(mu[prev_max_i] - prev_max) < 0.15):
             mu = np.random.uniform(0, 1, num_arms)
             max_mu = np.max(mu)
             for i in np.arange(num_arms):
@@ -52,9 +48,6 @@ for run in np.arange(runs):
             if(A[i].change_detection(best_k)):
                 A[i].reinitialize_param()
             #print("Change time pred. =",t)
-    
-    if ((run%10)==0):
-        sys.stdout.write('.'); sys.stdout.flush();
         
 #********************************************************************#
 regret_ks_avg = []
