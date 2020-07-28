@@ -1,2 +1,2 @@
-# Thompsom_Sampling_GoF
+# Thompsom_Sampling_with_Goodness_of_Fit_tests
 Code repository for Thompson Sampling equipped with Goodness of Fitness test based active change-point detection for Non-Stationary Bandits.
