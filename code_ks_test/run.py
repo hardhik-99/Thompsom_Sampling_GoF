@@ -53,8 +53,8 @@ for run in np.arange(runs):
     #if ((run%10)==0):
         #sys.stdout.write('.'); sys.stdout.flush();
     for i in range(num_agents):
-        A[i].reinitialize_param()
-        print("Run:",run,"TS-KS-Cumulative:", i, "----->",A[i].regret[run, t+1])
+        A[i].reinitialize_param() #Reinitialize before next run
+        print("Run:",run,"TS-KS-Cumulative:", i, "----->",A[i].regret[run, t+1]) #Print current episode's cumulative regret
     print("\n")
         
 #********************************************************************#
