@@ -2,16 +2,18 @@
 """
 Created on Tue Jul 28 09:58:11 2020
 
-@author: hardh
+@author: hardh, aniq55
 """
 import sys
 from agent import ThomSamp_GoF
 from agent_cd import ThomSamp_MeanDiff
 from arm_reward_truncnorm import TruncNorm
+from arm_reward_server import Server
 from constants import *
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+
 
 A = [] #Agents list
 A.append(ThomSamp_MeanDiff()) #Agent 0 (TS-CD)
@@ -19,21 +21,36 @@ A.append(ThomSamp_GoF())    #Agent 1 (TS-KS)
 
 for run in np.arange(runs):
 
+    # arm = []
+    # # sets the mean of each arm (per epoch)
+    # mu = np.random.uniform(0, 1, num_arms)
+    # max_mu = np.max(mu)
+    # #print(mu)
+    # for i in np.arange(num_arms):
+    #     # defines each arm
+    #     arm.append(TruncNorm(mu[i]))
+
     arm = []
-    mu = np.random.uniform(0, 1, num_arms)
-    max_mu = np.max(mu)
-    #print(mu)
     for i in np.arange(num_arms):
-        arm.append(TruncNorm(mu[i]))
+        B_max_this = np.random.uniform(B_max_min, B_max_max)
+        compute_cap_this = np.random.uniform(compute_cap_min, compute_cap_max)
+        arm.append(Server(B_max_this, compute_cap_this))
+
+    epoch_count = 0
+    user_split = np.random.multinomial(TOTAL_USERS, p_vals_uniform)
+    
+    for i in np.arange(num_arms):
+        arm[i].epoch_specific(epoch_durations[epoch_count], user_split[i])
+
+    epoch_count = epoch_count + 1
 
     for t in np.arange(T):
         if t in change_points:
-            arm = []
-            mu = np.random.uniform(0, 1, num_arms)
-            max_mu = np.max(mu)
+            # re-defining the arms at change points
+            user_split = np.random.multinomial(TOTAL_USERS, p_vals_uniform)
             for i in np.arange(num_arms):
-                arm.append(TruncNorm(mu[i]))
-            #print(mu)
+                arm[i].epoch_specific(epoch_durations[epoch_count], user_split[i])
+            epoch_count = epoch_count + 1
             
         for i in range(num_agents):
             k = A[i].select_arm()

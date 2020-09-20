@@ -2,7 +2,7 @@
 """
 Created on Tue Jul 28 10:11:04 2020
 
-@author: hardh
+@author: hardh, aniq55
 """
 import numpy as np
 
@@ -18,8 +18,26 @@ runs = 10
 num_agents = 2
 mean_ref = 0.1 #TS-CD reference test statistic
 
-change_points = [int(np.random.exponential(1000))]  #Change-points follow a poisson process(lam=0.001)
+epoch_durations = [int(np.random.exponential(1000))]  #Change-points follow a poisson process(lam=0.001)
+
+change_points = epoch_durations
 while (change_points[-1] < T):
     change_points.append(int(change_points[-1] + np.random.exponential(1000)))
 change_points.remove(change_points[-1])
 print(change_points)
+
+T_MAX = 10
+RATE_OFFLOAD = 10
+LOAD = 10
+
+
+B_max_max = 100
+B_max_min = 10
+
+compute_cap_max = 100
+compute_cap_min = 100
+
+
+TOTAL_USERS = 100
+
+p_vals_uniform = (1.0/num_arms)*np.ones(num_arms)
