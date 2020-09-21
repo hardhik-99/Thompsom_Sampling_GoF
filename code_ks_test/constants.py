@@ -17,13 +17,17 @@ runs = 10
 #change_points = [1000, 2000, 3000, 4000]
 num_agents = 2
 mean_ref = 0.1 #TS-CD reference test statistic
-
+"""
 epoch_durations = [int(np.random.exponential(1000))]  #Change-points follow a poisson process(lam=0.001)
 
 change_points = epoch_durations
 while (change_points[-1] < T):
     change_points.append(int(change_points[-1] + np.random.exponential(1000)))
 change_points.remove(change_points[-1])
+print(len(change_points))
+"""
+epoch_durations = np.random.exponential(1000, 10).astype(int)
+change_points = np.cumsum(epoch_durations)
 print(change_points)
 
 T_MAX = 10

@@ -74,7 +74,7 @@ class ThomSamp_GoF():
                 return False
         else:
             return False
-        
+    
     def update_regret(self, run, t, max_mu, selected_mu):
         self.regret[run, t+1] = self.regret[run, t] + max_mu - selected_mu
         self.regret_norm[run, t+1] = self.regret[run, t+1] * (1/(t+1))

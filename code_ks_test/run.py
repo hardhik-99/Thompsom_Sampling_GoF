@@ -34,7 +34,7 @@ for run in np.arange(runs):
     for i in np.arange(num_arms):
         B_max_this = np.random.uniform(B_max_min, B_max_max)
         compute_cap_this = np.random.uniform(compute_cap_min, compute_cap_max)
-        arm.append(Server(B_max_this, compute_cap_this))
+        arm.append(Server(B_max_this, compute_cap_this)) #Add reward distribution of the arm
 
     epoch_count = 0
     user_split = np.random.multinomial(TOTAL_USERS, p_vals_uniform)
@@ -49,20 +49,23 @@ for run in np.arange(runs):
             # re-defining the arms at change points
             user_split = np.random.multinomial(TOTAL_USERS, p_vals_uniform)
             for i in np.arange(num_arms):
-                arm[i].epoch_specific(epoch_durations[epoch_count], user_split[i])
+                arm[i].epoch_specific(epoch_durations[0], user_split[i])
             epoch_count = epoch_count + 1
-            
+
         for i in range(num_agents):
+            reward_all_arms = [arm[j].draw() for j in range(num_arms)]
             k = A[i].select_arm()
-            r = arm[k].draw()
+            r = reward_all_arms[k][1]
             A[i].store_reward(r, k)
-            b = np.random.binomial(1, r, 1)
+            #b = np.random.binomial(1, r, 1)
+            b = reward_all_arms[k][0]
             A[i].update_param(b, k)
             A[i].update_count(k)
-            A[i].update_regret(run, t, max_mu, arm[k].mu)
-        
+            
+            A[i].update_regret(run, t, max([x[1] for x in reward_all_arms]), r)
+                
             best_k = np.argmax(A[i].alpha/(A[i].alpha + A[i].beta)) #Current best arm
-        
+            
             if(A[i].change_detection(best_k)):
                 A[i].reinitialize_param()
                 #print("Change time pred. =", i, "---->", t)

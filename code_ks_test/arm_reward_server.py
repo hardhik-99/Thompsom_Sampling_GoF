@@ -21,10 +21,13 @@ class Server():
         
         if self.high < self.low:
             self.low, self.high = self.high, self.low
-        
+            
     def draw(self):
         sample_buffer_length = np.random.uniform(self.low, self.high)
-        sample = (sample_buffer_length + LOAD)/self.compute_cap < T_MAX
-
+        Tc = (sample_buffer_length + LOAD)/self.compute_cap
+        if Tc<=T_MAX: 
+            sample = (1, (T_MAX-Tc)/T_MAX)
+        if Tc>T_MAX: 
+            sample = (0, 1/Tc)
         return sample
     
