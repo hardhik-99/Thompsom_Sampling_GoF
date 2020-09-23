@@ -20,7 +20,10 @@ A.append(ThomSamp_MeanDiff()) #Agent 0 (TS-CD)
 A.append(ThomSamp_GoF())    #Agent 1 (TS-KS)
 
 for run in np.arange(runs):
-
+    
+    epoch_durations = np.random.exponential(70, 100).astype(int)
+    change_points = np.cumsum(epoch_durations)
+    print(change_points)
     # arm = []
     # # sets the mean of each arm (per epoch)
     # mu = np.random.uniform(0, 1, num_arms)
