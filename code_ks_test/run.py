@@ -18,10 +18,16 @@ A.append(ThomSamp_MeanDiff()) #Agent 0 (TS-CD)
 A.append(ThomSamp_GoF())    #Agent 1 (TS-KS)
 
 for run in np.arange(runs):
-
+    
+    change_points = [int(np.random.exponential(1000))]  #Change-points follow a poisson process(lam=0.001)
+    while (change_points[-1] < T):
+        change_points.append(int(change_points[-1] + np.random.exponential(1000)))
+    change_points.remove(change_points[-1])
+    print(change_points)
+            
     arm = []
     mu = np.random.uniform(0, 1, num_arms)
-    max_mu = np.max(mu)
+    #max_mu = np.max(mu)
     #print(mu)
     for i in np.arange(num_arms):
         arm.append(TruncNorm(mu[i]))
@@ -30,19 +36,22 @@ for run in np.arange(runs):
         if t in change_points:
             arm = []
             mu = np.random.uniform(0, 1, num_arms)
-            max_mu = np.max(mu)
+            #max_mu = np.max(mu)
             for i in np.arange(num_arms):
                 arm.append(TruncNorm(mu[i]))
             #print(mu)
-            
+        
         for i in range(num_agents):
+            reward_all_arms = [arm[j].draw() for j in range(num_arms)]
+            max_reward_t = max(reward_all_arms)
             k = A[i].select_arm()
-            r = arm[k].draw()
+            #r = arm[k].draw()
+            r = reward_all_arms[k]
             A[i].store_reward(r, k)
             b = np.random.binomial(1, r, 1)
             A[i].update_param(b, k)
             A[i].update_count(k)
-            A[i].update_regret(run, t, max_mu, arm[k].mu)
+            A[i].update_regret(run, t, max_reward_t, r)
         
             best_k = np.argmax(A[i].alpha/(A[i].alpha + A[i].beta)) #Current best arm
         
