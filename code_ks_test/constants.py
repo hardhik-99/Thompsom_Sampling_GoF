@@ -13,10 +13,11 @@ p_ref = 1e-4 * 6    #TS-KS reference test statistic
 num_arms = 3
 
 T = 5000 #Time horizon
-runs = 100
+runs = 3
 #change_points = [1000, 2000, 3000, 4000]
-num_agents = 2
-mean_ref = 0.1 #TS-CD reference test statistic
+num_agents = 4
+mean_ref = 0.05 #TS-CD reference test statistic
+gamma = 0.995
 """
 epoch_durations = [int(np.random.exponential(1000))]  #Change-points follow a poisson process(lam=0.001)
 
@@ -28,7 +29,7 @@ print(len(change_points))
 """
 
 
-T_MAX = 0.1 # need to see the values of T_c to fix this
+T_MAX = 0.05 # need to see the values of T_c to fix this
 RATE_OFFLOAD = 1024.0*10**3 # 8 kbps
 LOAD = 20.0*10**6 # 20 MB * 1 cycle/byte
 

@@ -7,23 +7,29 @@ Created on Tue Jul 28 09:58:11 2020
 import sys
 from agent import ThomSamp_GoF
 from agent_cd import ThomSamp_MeanDiff
+from agent_plainTS import ThomSamp_Plain
+from agent_DiscountedTS import ThomSamp_Discounted
 from arm_reward_truncnorm import TruncNorm
 from arm_reward_server import Server
 from constants import *
 import numpy as np
 import random
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 24})
 
 
 A = [] #Agents list
 A.append(ThomSamp_MeanDiff()) #Agent 0 (TS-CD)
 A.append(ThomSamp_GoF())    #Agent 1 (TS-KS)
-
+A.append(ThomSamp_Plain())  #Agent 2 (Plain TS)
+A.append(ThomSamp_Discounted())  #Agent 2 (Discounted TS)
+    
 for run in np.arange(runs):
     
-    epoch_durations = np.random.exponential(70, 100).astype(int)
+    epoch_durations = np.random.exponential(300, 100).astype(int)
     change_points = np.cumsum(epoch_durations)
-    print(change_points)
+    #print(change_points)
+    
     # arm = []
     # # sets the mean of each arm (per epoch)
     # mu = np.random.uniform(0, 1, num_arms)
@@ -94,18 +100,36 @@ time_arr = np.arange(T+1)
 
 plt.figure(figsize=(15,7.5), dpi= 80)
 plt.plot(time_arr, regret_ks_avg[0],'b',markersize = 0.2, label="TS-CD")
+"""
 plt.fill_between(time_arr,\
         regret_ks_avg[0]-regret_ks_std[0], \
         regret_ks_avg[0]+regret_ks_std[0], \
         color='b', alpha=0.2)
+"""
 plt.plot(time_arr, regret_ks_avg[1],'r',markersize = 0.2, label="TS-KS")
+"""
 plt.fill_between(time_arr,\
         regret_ks_avg[1]-regret_ks_std[1], \
         regret_ks_avg[1]+regret_ks_std[1], \
         color='r', alpha=0.2)
-plt.xlabel("Time Step----->")
-plt.ylabel("Cumulative regret----->")
-plt.title("Non-Stationary TS")
+"""
+plt.plot(time_arr, regret_ks_avg[2],'g',markersize = 0.2, label="TS")
+"""
+plt.fill_between(time_arr,\
+        regret_ks_avg[2]-regret_ks_std[2], \
+        regret_ks_avg[2]+regret_ks_std[2], \
+        color='g', alpha=0.2)
+"""
+plt.plot(time_arr, regret_ks_avg[3],'k',markersize = 0.2, label="Discounted TS")
+"""
+plt.fill_between(time_arr,\
+        regret_ks_avg[3]-regret_ks_std[3], \
+        regret_ks_avg[3]+regret_ks_std[3], \
+        color='k', alpha=0.2)
+"""
+plt.xlabel("Time Step")
+plt.ylabel("Cumulative regret")
+#plt.title("Non-Stationary TS")
 plt.legend(loc="upper left")
 plt.ylim(ymin=0)
 plt.xlim(xmin=0)
@@ -125,18 +149,36 @@ time_arr = np.arange(T+1)
 
 plt.figure(figsize=(15,7.5), dpi= 80)
 plt.plot(time_arr, regret_norm_ks_avg[0],'b',markersize = 0.2, label="TS-CD")
+"""
 plt.fill_between(time_arr,\
     regret_norm_ks_avg[0]-regret_norm_ks_std[0], \
     regret_norm_ks_avg[0]+regret_norm_ks_std[0], \
     color='b', alpha=0.2)
+"""
 plt.plot(time_arr, regret_norm_ks_avg[1],'r',markersize = 0.2, label="TS-KS")
+"""
 plt.fill_between(time_arr,\
     regret_norm_ks_avg[1]-regret_norm_ks_std[1], \
     regret_norm_ks_avg[1]+regret_norm_ks_std[1], \
     color='r', alpha=0.2)
-plt.xlabel("Time Step----->")
-plt.ylabel("Normalized regret----->")
-plt.title("Non-Stationary TS")
+"""
+plt.plot(time_arr, regret_norm_ks_avg[2],'g',markersize = 0.2, label="TS")
+"""
+plt.fill_between(time_arr,\
+    regret_norm_ks_avg[2]-regret_norm_ks_std[2], \
+    regret_norm_ks_avg[2]+regret_norm_ks_std[2], \
+    color='g', alpha=0.2)
+"""
+plt.plot(time_arr, regret_norm_ks_avg[3],'k',markersize = 0.2, label="Discounted TS")
+"""
+plt.fill_between(time_arr,\
+    regret_norm_ks_avg[3]-regret_norm_ks_std[3], \
+    regret_norm_ks_avg[3]+regret_norm_ks_std[3], \
+    color='k', alpha=0.2)
+"""
+plt.xlabel("Time Step")
+plt.ylabel("Normalized regret")
+#plt.title("Non-Stationary TS")
 plt.legend(loc="upper left")
 plt.ylim(ymin=0)
 plt.xlim(xmin=0)
