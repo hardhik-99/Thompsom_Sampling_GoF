@@ -13,7 +13,7 @@ p_ref = 1e-4 * 6    #TS-KS reference test statistic
 num_arms = 3
 
 T = 5000 #Time horizon
-runs = 3
+runs = 300
 #change_points = [1000, 2000, 3000, 4000]
 num_agents = 4
 mean_ref = 0.05 #TS-CD reference test statistic
