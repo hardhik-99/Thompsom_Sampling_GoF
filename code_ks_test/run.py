@@ -16,13 +16,14 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt
 plt.rcParams.update({'font.size': 24})
+import pandas as pd 
 
 
 A = [] #Agents list
 A.append(ThomSamp_MeanDiff()) #Agent 0 (TS-CD)
 A.append(ThomSamp_GoF())    #Agent 1 (TS-KS)
 A.append(ThomSamp_Plain())  #Agent 2 (Plain TS)
-A.append(ThomSamp_Discounted())  #Agent 2 (Discounted TS)
+A.append(ThomSamp_Discounted())  #Agent 3 (Discounted TS)
     
 for run in np.arange(runs):
     
@@ -89,44 +90,40 @@ for run in np.arange(runs):
 #********************************************************************#
 regret_ks_avg = []
 regret_ks_std = []
- 
+
 #Plot cumulative regret graph
 for i in range(num_agents):
     regret_ks_avg.append(np.mean(A[i].regret, axis=0))
     regret_ks_std.append(np.std(A[i].regret, axis=0))
     print("TS-KS-Cumulative", i, ":",regret_ks_avg[i][t])
-
+    
+#pd.DataFrame(np.array(regret_ks_avg)[:, :]).to_csv(r"C:\Users\hardh\Desktop\Reinforcement_Learning\regret_ks_avg.csv")
+#pd.DataFrame(np.array(regret_ks_avg)[:, :]).to_csv(r"C:\Users\hardh\Desktop\Reinforcement_Learning\regret_ks_std.csv")    
+    
 time_arr = np.arange(T+1)
 
-plt.figure(figsize=(15,7.5), dpi= 80)
-plt.plot(time_arr, regret_ks_avg[0],'b',markersize = 0.2, label="TS-CD")
-"""
+plt.figure(figsize=(15,7.5), dpi=600)
+#plt.figure(figsize=(3.54,3.54), dpi=300)
+plt.plot(time_arr, regret_ks_avg[0],'b',markersize = 0.1, label="TS-CD")
 plt.fill_between(time_arr,\
         regret_ks_avg[0]-regret_ks_std[0], \
         regret_ks_avg[0]+regret_ks_std[0], \
         color='b', alpha=0.2)
-"""
-plt.plot(time_arr, regret_ks_avg[1],'r',markersize = 0.2, label="TS-KS")
-"""
+plt.plot(time_arr, regret_ks_avg[1],'r',markersize = 0.1, label="TS-KS")
 plt.fill_between(time_arr,\
         regret_ks_avg[1]-regret_ks_std[1], \
         regret_ks_avg[1]+regret_ks_std[1], \
         color='r', alpha=0.2)
-"""
-plt.plot(time_arr, regret_ks_avg[2],'g',markersize = 0.2, label="TS")
-"""
+plt.plot(time_arr, regret_ks_avg[2],'g',markersize = 0.1, label="TS")
 plt.fill_between(time_arr,\
         regret_ks_avg[2]-regret_ks_std[2], \
         regret_ks_avg[2]+regret_ks_std[2], \
         color='g', alpha=0.2)
-"""
-plt.plot(time_arr, regret_ks_avg[3],'k',markersize = 0.2, label="Discounted TS")
-"""
+plt.plot(time_arr, regret_ks_avg[3],'k',markersize = 0.1, label="Discounted TS")
 plt.fill_between(time_arr,\
         regret_ks_avg[3]-regret_ks_std[3], \
         regret_ks_avg[3]+regret_ks_std[3], \
         color='k', alpha=0.2)
-"""
 plt.xlabel("Time Step")
 plt.ylabel("Cumulative regret")
 #plt.title("Non-Stationary TS")
@@ -135,6 +132,7 @@ plt.ylim(ymin=0)
 plt.xlim(xmin=0)
 plt.grid()
 plt.show()
+#plt.savefig(r'C:\Users\hardh\Desktop\Reinforcement_Learning\Cumulative_regret.png', format='png', dpi=300)
 
 #Plot Normalized regret graph
 regret_norm_ks_avg = []
@@ -147,35 +145,28 @@ for i in range(num_agents):
 
 time_arr = np.arange(T+1)
 
-plt.figure(figsize=(15,7.5), dpi= 80)
-plt.plot(time_arr, regret_norm_ks_avg[0],'b',markersize = 0.2, label="TS-CD")
-"""
+plt.figure(figsize=(15,7.5), dpi=600)
+#plt.figure(figsize=(3.54,3.54), dpi=300)
+plt.plot(time_arr, regret_norm_ks_avg[0],'b',markersize = 0.1, label="TS-CD")
 plt.fill_between(time_arr,\
     regret_norm_ks_avg[0]-regret_norm_ks_std[0], \
     regret_norm_ks_avg[0]+regret_norm_ks_std[0], \
     color='b', alpha=0.2)
-"""
-plt.plot(time_arr, regret_norm_ks_avg[1],'r',markersize = 0.2, label="TS-KS")
-"""
+plt.plot(time_arr, regret_norm_ks_avg[1],'r',markersize = 0.1, label="TS-KS")
 plt.fill_between(time_arr,\
     regret_norm_ks_avg[1]-regret_norm_ks_std[1], \
     regret_norm_ks_avg[1]+regret_norm_ks_std[1], \
     color='r', alpha=0.2)
-"""
-plt.plot(time_arr, regret_norm_ks_avg[2],'g',markersize = 0.2, label="TS")
-"""
+plt.plot(time_arr, regret_norm_ks_avg[2],'g',markersize = 0.1, label="TS")
 plt.fill_between(time_arr,\
     regret_norm_ks_avg[2]-regret_norm_ks_std[2], \
     regret_norm_ks_avg[2]+regret_norm_ks_std[2], \
     color='g', alpha=0.2)
-"""
-plt.plot(time_arr, regret_norm_ks_avg[3],'k',markersize = 0.2, label="Discounted TS")
-"""
+plt.plot(time_arr, regret_norm_ks_avg[3],'k',markersize = 0.1, label="Discounted TS")
 plt.fill_between(time_arr,\
     regret_norm_ks_avg[3]-regret_norm_ks_std[3], \
     regret_norm_ks_avg[3]+regret_norm_ks_std[3], \
     color='k', alpha=0.2)
-"""
 plt.xlabel("Time Step")
 plt.ylabel("Normalized regret")
 #plt.title("Non-Stationary TS")
@@ -184,4 +175,4 @@ plt.ylim(ymin=0)
 plt.xlim(xmin=0)
 plt.grid()
 plt.show()
-    
+#plt.savefig(r'C:\Users\hardh\Desktop\Reinforcement_Learning\Normalised_regret.png', format='png', dpi=300)
